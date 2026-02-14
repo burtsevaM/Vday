@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --pink-1: #ff4ba5;
+        --pink-2: #ff1789;
+        --cream: #f4ecef;
+        --card: #f1e4e7;
+        --text: #2f2d32;
+        --yes-scale: 1;
+        --screen-bloom: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: "Manrope", sans-serif;
+        background: radial-gradient(circle at 15% 18%, #ff80c0 0%, #f2d3dc 32%, #ebdae2 70%, #dcc7ea 100%);
+        overflow: hidden;
+        padding: 24px;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(circle at center, rgba(255, 31, 147, 0.22) 0%, rgba(255, 18, 130, 0.62) 75%, rgba(113, 0, 56, 0.9) 100%);
+        opacity: var(--screen-bloom);
+        transition: opacity 220ms ease;
+        z-index: 8;
+      }
+
+      .bg-heart {
+        position: fixed;
+        width: 24px;
+        height: 24px;
+        opacity: 0.55;
+        filter: blur(0.3px);
+        z-index: 0;
+        animation: drift 8s ease-in-out infinite;
+      }
+
+      .bg-heart::before {
+        content: "\2665";
+        color: #ff5bad;
+        font-size: 24px;
+      }
+
+      .bg-heart.h1 {
+        top: 12%;
+        left: 8%;
+      }
+
+      .bg-heart.h2 {
+        top: 35%;
+        right: 10%;
+        animation-delay: 1.6s;
+      }
+
+      .bg-heart.h3 {
+        bottom: 14%;
+        left: 14%;
+        animation-delay: 0.9s;
+      }
+
+      .bg-heart.h4 {
+        bottom: 22%;
+        right: 8%;
+        animation-delay: 2.1s;
+      }
+
+      .card {
+        width: min(88vw, 520px);
+        max-height: min(92vh, 760px);
+        border-radius: 44px;
+        background: linear-gradient(160deg, #f6edf0 0%, #ead6db 100%);
+        border: 4px solid rgba(255, 255, 255, 0.42);
+        box-shadow: 0 30px 70px rgba(58, 26, 45, 0.2);
+        padding: clamp(18px, 3vw, 34px) clamp(14px, 3vw, 34px)
+          clamp(24px, 4vw, 38px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: clamp(12px, 1.7vw, 18px);
+        position: relative;
+        z-index: 10;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(24px, 3.8vw, 40px);
+        line-height: 1.1;
+        color: var(--text);
+        letter-spacing: 0.2px;
+        text-align: center;
+        text-wrap: balance;
+        font-weight: 800;
+      }
+
+      .media-frame {
+        width: min(100%, 400px);
+        aspect-ratio: 1 / 1;
+        border-radius: 22px;
+        padding: 12px;
+        background: var(--cream);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8), 0 18px 44px rgba(73, 42, 57, 0.14);
+      }
+
+      .media-frame video {
+        width: 100%;
+        height: 100%;
+        border-radius: 18px;
+        object-fit: cover;
+        display: block;
+        background: #e8dee1;
+      }
+
+      .media-frame video[hidden] {
+        display: none;
+      }
+
+      .actions {
+        width: min(100%, 420px);
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        align-items: center;
+        margin-top: 4px;
+        position: relative;
+        z-index: 16;
+      }
+
+      button {
+        border: 0;
+        width: 160px;
+        height: 74px;
+        border-radius: 999px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 48px;
+        letter-spacing: 2px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      #yesBtn {
+        color: #fff;
+        background: linear-gradient(180deg, var(--pink-1) 0%, var(--pink-2) 100%);
+        box-shadow: 0 12px 26px rgba(249, 31, 145, 0.46);
+        transform: scale(var(--yes-scale));
+        transform-origin: center center;
+        transition: transform 200ms ease, box-shadow 180ms ease, opacity 160ms ease;
+        position: relative;
+        z-index: 30;
+      }
+
+      #yesBtn.yes-floating {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(var(--yes-scale));
+        z-index: 120;
+      }
+
+      #yesBtn:hover {
+        box-shadow: 0 14px 32px rgba(255, 18, 131, 0.55);
+      }
+
+      #noBtn {
+        color: #4a4b4d;
+        background: #ece3e1;
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.7);
+        transition: transform 140ms ease, left 170ms ease, top 170ms ease;
+        position: relative;
+        z-index: 12;
+      }
+
+      .card.accepted {
+        box-shadow: 0 32px 78px rgba(255, 51, 157, 0.38);
+      }
+
+      .card.accepted #yesBtn {
+        display: none;
+      }
+
+      .card.accepted #noBtn {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      @keyframes drift {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-14px) rotate(6deg);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .card {
+          min-height: auto;
+          width: min(94vw, 460px);
+        }
+
+        .actions {
+          justify-content: center;
+          flex-wrap: nowrap;
+          padding-bottom: 10px;
+        }
+
+        button {
+          width: clamp(150px, 42vw, 190px);
+          height: 78px;
+          font-size: clamp(46px, 12vw, 56px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <span class="bg-heart h1" aria-hidden="true"></span>
+    <span class="bg-heart h2" aria-hidden="true"></span>
+    <span class="bg-heart h3" aria-hidden="true"></span>
+    <span class="bg-heart h4" aria-hidden="true"></span>
+
+    <main class="card" id="card">
+      <h1 id="question">Will you be my valentine?💖</h1>
+
+      <div class="media-frame">
+        <video id="introVideo" autoplay muted loop playsinline preload="auto">
+          <source src="assets/videos/IMG_0563.mp4" type="video/mp4" />
+          <source src="assets/videos/IMG_0563.MOV" type="video/quicktime" />
+          Your browser does not support the video tag.
+        </video>
+
+        <video id="resultVideo" muted loop playsinline preload="auto" hidden>
+          <source src="assets/videos/IMG_0565.mp4" type="video/mp4" />
+          <source src="assets/videos/IMG_0565.MOV" type="video/quicktime" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="actions" id="actions">
+        <button id="yesBtn" type="button">YES</button>
+        <button id="noBtn" type="button" aria-label="No">NO</button>
+      </div>
+    </main>
+
+    <script>
+      const question = document.getElementById("question");
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const card = document.getElementById("card");
+      const introVideo = document.getElementById("introVideo");
+      const resultVideo = document.getElementById("resultVideo");
+
+      let yesScale = 1;
+      let accepted = false;
+      let introSoundEnabled = false;
+
+      const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+      function setYesScale(value) {
+        yesScale = clamp(value, 1, 8);
+        document.documentElement.style.setProperty("--yes-scale", yesScale.toFixed(2));
+
+        // Increases a global glow so YES visually starts dominating the screen.
+        const bloom = clamp((yesScale - 1) / 9, 0, 0.78);
+        document.documentElement.style.setProperty("--screen-bloom", bloom.toFixed(2));
+
+        // Once YES grows enough, pin it to the center of the screen.
+        yesBtn.classList.toggle("yes-floating", yesScale >= 1.6 && !accepted);
+      }
+
+      function growYes() {
+        if (accepted) return;
+        setYesScale(yesScale + 0.55);
+      }
+
+      function enableIntroSound() {
+        if (introSoundEnabled || accepted) return;
+        introSoundEnabled = true;
+        introVideo.muted = false;
+        introVideo.volume = 1;
+        introVideo.play().catch(() => {
+          // If the browser still blocks sound, keep playing silently.
+          introVideo.muted = true;
+        });
+      }
+
+      function moveNoButtonAway(pointerX, pointerY) {
+        if (accepted) return;
+
+        const rect = noBtn.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const directionX = centerX < pointerX ? -1 : 1;
+        const directionY = centerY < pointerY ? -1 : 1;
+
+        const jitterX = (Math.random() - 0.5) * 140;
+        const jitterY = (Math.random() - 0.5) * 140;
+
+        let nextLeft = rect.left + directionX * (110 + Math.random() * 190) + jitterX;
+        let nextTop = rect.top + directionY * (80 + Math.random() * 170) + jitterY;
+
+        nextLeft = clamp(nextLeft, 14, window.innerWidth - rect.width - 14);
+        nextTop = clamp(nextTop, 14, window.innerHeight - rect.height - 14);
+
+        noBtn.style.position = "fixed";
+        noBtn.style.left = `${nextLeft}px`;
+        noBtn.style.top = `${nextTop}px`;
+
+        growYes();
+      }
+
+      function pointerDistanceToNo(clientX, clientY) {
+        const rect = noBtn.getBoundingClientRect();
+        const dx = clientX - (rect.left + rect.width / 2);
+        const dy = clientY - (rect.top + rect.height / 2);
+        return Math.hypot(dx, dy);
+      }
+
+      noBtn.addEventListener("pointerenter", (event) => {
+        if (event.pointerType === "mouse") {
+          moveNoButtonAway(event.clientX, event.clientY);
+        }
+      });
+
+      noBtn.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        moveNoButtonAway(event.clientX, event.clientY);
+      });
+
+      document.addEventListener("pointermove", (event) => {
+        if (accepted || event.pointerType !== "mouse") return;
+        if (pointerDistanceToNo(event.clientX, event.clientY) < 110) {
+          moveNoButtonAway(event.clientX, event.clientY);
+        }
+      });
+
+      // Autoplay starts muted; unmute after the first explicit user action.
+      document.addEventListener("pointerdown", enableIntroSound, { once: true });
+      document.addEventListener("keydown", enableIntroSound, { once: true });
+
+      yesBtn.addEventListener("click", () => {
+        accepted = true;
+        card.classList.add("accepted");
+        yesBtn.classList.remove("yes-floating");
+        question.textContent = "УРА!!!";
+
+        introVideo.pause();
+        introVideo.hidden = true;
+
+        resultVideo.hidden = false;
+        resultVideo.currentTime = 0;
+        resultVideo.muted = false;
+
+        resultVideo
+          .play()
+          .catch(() => {
+            resultVideo.muted = true;
+            resultVideo.play().catch(() => {});
+          });
+
+        setYesScale(1);
+      });
+    </script>
+  </body>
+</html>
